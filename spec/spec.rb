@@ -53,6 +53,7 @@ describe "possibly" do
 
   describe "is_a" do
     it "Some" do
+      expect(Some(nil).is_a?(None)).to eql(true)
       expect(Some(1).is_a?(Some)).to eql(true)
       expect(Some(1).is_a?(None)).to eql(false)
       expect(None().is_a?(Some)).to eql(false)

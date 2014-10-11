@@ -15,10 +15,18 @@ class Maybe
     other.class == self.class
   end
   alias_method :eql?, :==
+
+  def self.empty_value?(value)
+    value.nil? || (value.respond_to?(:length) && value.length == 0)
+  end
 end
 
 # Represents a non-empty value
 class Some < Maybe
+  def self.new(value)
+    super
+  end
+
   def initialize(value)
     @value = value
   end
@@ -94,15 +102,11 @@ end
 
 # rubocop:disable MethodName
 def Maybe(value)
-  if value.nil? || (value.respond_to?(:length) && value.length == 0)
-    None()
-  else
-    Some(value)
-  end
+  Maybe.empty_value?(value) ? None() : Some.new(value)
 end
 
 def Some(value)
-  Some.new(value)
+  Maybe(value)
 end
 
 def None
