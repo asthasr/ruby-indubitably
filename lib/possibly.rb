@@ -23,10 +23,6 @@ end
 
 # Represents a non-empty value
 class Some < Maybe
-  def self.new(value)
-    super
-  end
-
   def initialize(value)
     @value = value
   end
