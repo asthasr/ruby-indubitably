@@ -66,6 +66,33 @@ Maybe("I'm a value").upcase                 => #<Some:0x007ffe198e6128 @value="I
 Maybe(nil).upcase                           => None
 ```
 
+### Joining
+
+In 0.3.0, there is new functionality to make it easy to "flatten" a nested `Maybe` structure:
+
+```ruby
+Maybe(Some(7)).join                         => Some(7)
+Maybe(Maybe(Some(7))).join!                 => Some(7)
+Maybe(None()).join                          => None()
+Maybe(Maybe(None())).join!                  => None()
+```
+
+This is equivalent to `join` from the `Control.Monad` package in Haskell, or `x >>= id`.
+
+### Forcing Value Dispatch
+
+Unfortunately, some of the method names for `Enumerable` (and thus `Maybe`) clash with methods that you might want to call on the wrapped value. If you use an underscore at the beginning of the method name, it will be dispatched to the wrapped value:
+
+```ruby
+Some([2, 3, 4])._map { |n| n * n }          => Some([4, 9, 16])
+```
+
+This also has the side-effect of making it easier to call methods on nested structures without flattening them completely:
+
+```ruby
+Some(Some([2, 3, 4]).__map { |n| n * n }    => Some(Some([4, 9, 16]))
+```
+
 ### Case expression
 
 Maybe implements threequals method `#===`, so it can be used in case expressions:
