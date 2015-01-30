@@ -62,7 +62,7 @@ describe "indubitably" do
       end
 
       it "joins all None instances recursively" do
-        expect(nested_none.join!.is_none?).to be_true
+        expect(nested_none.join!.is_none?).to be_truthy
       end
     end
   end
@@ -201,7 +201,7 @@ describe "indubitably" do
     end
 
     it "works with Nones" do
-      expect(None()._something.is_none?).to be_true
+      expect(None()._something.is_none?).to be_truthy
     end
   end
 end
