@@ -1,6 +1,6 @@
-require 'possibly'
+require 'indubitably'
 
-describe "possibly" do
+describe "indubitably" do
   describe "enumerable" do
     it "#each" do
       expect { |b| Some(1).each(&b) }.to yield_with_args(1)

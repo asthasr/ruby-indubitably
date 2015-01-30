@@ -1,7 +1,7 @@
 # Possibly - Maybe monad for Ruby
 
-[![Travis CI](https://travis-ci.org/rap1ds/ruby-possibly.svg?branch=master)](https://travis-ci.org/rap1ds/ruby-possibly)
-[![Code Climate](https://codeclimate.com/github/rap1ds/ruby-possibly/badges/gpa.svg)](https://codeclimate.com/github/rap1ds/ruby-possibly)
+[![Travis CI](https://travis-ci.org/asthasr/ruby-indubitably.svg?branch=master)](https://travis-ci.org/rap1ds/ruby-indubitably)
+[![Code Climate](https://codeclimate.com/github/asthasr/ruby-indubitably/badges/gpa.svg)](https://codeclimate.com/github/rap1ds/ruby-indubitably)
 
 Maybe monad implementation for Ruby
 
@@ -14,13 +14,13 @@ puts Maybe(User.find_by_id("123")).username.downcase.or_else { "N/A" }
 ## Installation
 
 ```ruby
-gem install possibly
+gem install indubitably
 ```
 
 ## Getting started
 
 ```
-require 'possibly'
+require 'indubitably'
 
 first_name = Maybe(deep_hash)[:account][:profile][:first_name].or_else { "No first name available" }
 ```
@@ -159,10 +159,7 @@ Same in HAML view, without Maybe():
 
 [MIT](LICENSE)
 
-## Author
+## Authors
 
-[Mikko Koski](https://github.com/rap1ds) / [@rap1ds](http://twitter.com/rap1ds)
-
-## Sponsored by
-
-[Sharetribe](https://github.com/sharetribe) / [@sharetribe](http://twitter.com/sharetribe) / [www.sharetribe.com](https://www.sharetribe.com)
+* [Blake Hyde](https://github.com/asthasr) / [@asthasr](http://twitter.com/asthasr)
+* [Mikko Koski](https://github.com/rap1ds) / [@rap1ds](http://twitter.com/rap1ds)
