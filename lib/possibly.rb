@@ -69,6 +69,10 @@ class Some < Maybe
   end
 
   def method_missing(method_sym, *args, &block)
+    if method_sym[0] == '_'
+      method_sym = method_sym.slice(1, method_sym.length)
+    end
+
     map { |value| value.send(method_sym, *args, &block) }
   end
 
@@ -98,14 +102,6 @@ class None < Maybe
     true
   end
   # rubocop:enable PredicateName
-
-  def join
-    self
-  end
-
-  def join!
-    self
-  end
 
   def method_missing(*)
     self

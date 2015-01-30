@@ -188,4 +188,20 @@ describe "possibly" do
       expect(Some([1, 2, 3]).map { |arr| arr.map { |v| v * v } }.get).to eql([1, 4, 9])
     end
   end
+
+  describe "underscore methods" do
+    let(:some_array) { Some([1, 2, 3, 4]) }
+
+    it "applies methods that have equivalents in Maybe to the wrapped value" do
+      expect(some_array._map { |n| n ** 2 }).to eq(Some([1, 4, 9, 16]))
+    end
+
+    it "applies methods without equivalents in Maybe to the wrapped value" do
+      expect(Some("abc")._upcase).to eq(Some("ABC"))
+    end
+
+    it "works with Nones" do
+      expect(None()._something.is_none?).to be_true
+    end
+  end
 end
