@@ -31,6 +31,10 @@ class Some < Maybe
     @value
   end
 
+  def if(&blk)
+    blk.call(@value) ? self : None()
+  end
+
   def or_else(*)
     @value
   end

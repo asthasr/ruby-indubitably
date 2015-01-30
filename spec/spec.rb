@@ -204,4 +204,18 @@ describe "indubitably" do
       expect(None()._something.is_none?).to be_truthy
     end
   end
+
+  describe "if" do
+    it "returns none if the condition is not met" do
+      expect(Maybe(7).if { |x| x.even? }).to eq(None())
+    end
+
+    it "returns some if the condition is met" do
+      expect(Maybe(4).if { |x| x.even? }).to eq(Some(4))
+    end
+
+    it "works with None" do
+      expect(Maybe(nil).if { |x| x.even? }).to eq(None())
+    end
+  end
 end
