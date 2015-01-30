@@ -36,6 +36,37 @@ describe "possibly" do
     end
   end
 
+  context "joining nested monads" do
+    let(:nested_none) { Maybe(None()) }
+    let(:nested_some) { Maybe(Some(10)) }
+    let(:deep_none) { Maybe(nested_none) }
+    let(:deep_some) { Maybe(nested_some) }
+
+    describe "#join" do
+      it "joins a nested none into its parent" do
+        expect(nested_none.join.is_none?).to eql(true)
+      end
+
+      it "joins a nested some into its parent" do
+        expect(nested_some.join.get).to eql(10)
+      end
+
+      it "does not join recursively" do
+        expect(deep_some.join.join.get).to eql(10)
+      end
+    end
+
+    describe "#join!" do
+      it "joins all Some instances recursively" do
+        expect(nested_some.join!.get).to eql(10)
+      end
+
+      it "joins all None instances recursively" do
+        expect(nested_none.join!.is_none?).to be_true
+      end
+    end
+  end
+
   describe "values and non-values" do
     it "None" do
       expect(Maybe(nil).is_none?).to eql(true)

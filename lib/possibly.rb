@@ -45,6 +45,20 @@ class Some < Maybe
   end
   # rubocop:enable PredicateName
 
+  def join
+    @value.is_a?(Maybe) ? @value : self
+  end
+
+  def join!
+    if @value.is_a?(Some)
+      @value.join!
+    elsif @value.is_a?(None)
+      @value
+    else
+      self
+    end
+  end
+
   def ==(other)
     super && get == other.get
   end
@@ -84,6 +98,14 @@ class None < Maybe
     true
   end
   # rubocop:enable PredicateName
+
+  def join
+    self
+  end
+
+  def join!
+    self
+  end
 
   def method_missing(*)
     self
