@@ -1,7 +1,6 @@
 # Possibly - Maybe monad for Ruby
 
 [![Travis CI](https://travis-ci.org/asthasr/ruby-indubitably.svg?branch=master)](https://travis-ci.org/asthasr/ruby-indubitably)
-[![Code Climate](https://codeclimate.com/github/asthasr/ruby-indubitably/badges/gpa.svg)](https://codeclimate.com/github/asthasr/ruby-indubitably)
 
 Maybe monad implementation for Ruby
 
