@@ -1,3 +1,4 @@
+# encoding: utf-8
 class Maybe
   ([:each] + Enumerable.instance_methods).each do |enumerable_method|
     define_method(enumerable_method) do |*args, &block|
@@ -73,7 +74,7 @@ class Some < Maybe
   end
 
   def method_missing(method_sym, *args, &block)
-    if method_sym[0] == '_'
+    if method_sym[0] == "_"
       method_sym = method_sym.slice(1, method_sym.length)
     end
 
@@ -90,7 +91,7 @@ end
 # Represents an empty value
 class None < Maybe
   def get
-    fail 'No such element'
+    fail "No such element"
   end
 
   def or_else(els = nil)

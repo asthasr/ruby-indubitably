@@ -1,4 +1,5 @@
-require 'indubitably'
+# encoding: utf-8
+require "indubitably"
 
 describe "indubitably" do
   describe "enumerable" do
@@ -12,25 +13,25 @@ describe "indubitably" do
       expect { |b| None().map(&b) }.not_to yield_with_args
     end
 
-    it "#inject" do
-      expect(Some(2).inject(5) { |v| v * v }).to eql(25)
-      expect { |b| None().inject(&b) }.not_to yield_with_args
-      expect(None().inject(5) { }).to eql(5)
+    it "#reduce" do
+      expect(Some(2).reduce(5) { |a, e| a * e }).to eql(10)
+      expect { |b| None().reduce(&b) }.not_to yield_with_args
+      expect(None().reduce(5) {}).to eql(5)
     end
 
     it "#select" do
-      expect(Some(2).select { |v| v % 2 == 0 }.get).to eql(2)
-      expect(Some(1).select { |v| v % 2 == 0 }.is_none?).to eql(true)
+      expect(Some(2).select(&:even?).get).to eql(2)
+      expect(Some(1).select(&:even?).is_none?).to eql(true)
     end
 
     it "#flat_map" do
-      div = ->(num, denom) {
+      div = lambda do |num, denom|
         if (denom == 0)
           Maybe(nil)
         else
           Maybe(num.to_f / denom.to_f)
         end
-      }
+      end
       expect(Maybe(5).flat_map { |x| div.call(1, x) }).to eql(Maybe(0.2))
       expect(Maybe(0).flat_map { |x| div.call(1, x) }).to eql(None())
     end
@@ -120,14 +121,15 @@ describe "indubitably" do
 
   describe "case expression" do
     def test_case_when(case_value, match_value, non_match_value)
-      value = case case_value
-      when non_match_value
-        false
-      when match_value
-        true
-      else
-        false
-      end
+      value =
+          case case_value
+          when non_match_value
+            false
+          when match_value
+            true
+          else
+            false
+          end
 
       expect(value).to be true
     end
@@ -149,8 +151,8 @@ describe "indubitably" do
     end
 
     it "matches to lambda" do
-      even = ->(a) { a % 2 == 0 }
-      odd = ->(a) { a % 2 == 1 }
+      even = ->(a) { a.even? }
+      odd = ->(a) { a.odd? }
       test_case_when(Maybe(2), Some(even), Some(odd))
     end
   end
@@ -182,18 +184,18 @@ describe "indubitably" do
     end
   end
 
-  describe "forward" do
-    it "forwards methods" do
-      expect(Some("maybe").upcase.get).to eql("MAYBE")
-      expect(Some([1, 2, 3]).map { |arr| arr.map { |v| v * v } }.get).to eql([1, 4, 9])
-    end
+  it "forwards methods" do
+    expect(Some("maybe").upcase.get).to eql("MAYBE")
+
+    mapped = Some([1, 2, 3]).map { |arr| arr.map { |v| v * v } }
+    expect(mapped.get).to eql([1, 4, 9])
   end
 
   describe "underscore methods" do
     let(:some_array) { Some([1, 2, 3, 4]) }
 
     it "applies methods that have equivalents in Maybe to the wrapped value" do
-      expect(some_array._map { |n| n ** 2 }).to eq(Some([1, 4, 9, 16]))
+      expect(some_array._map { |n| n**2 }).to eq(Some([1, 4, 9, 16]))
     end
 
     it "applies methods without equivalents in Maybe to the wrapped value" do

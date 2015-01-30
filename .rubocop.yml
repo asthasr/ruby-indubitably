@@ -1,3 +1,7 @@
 TrivialAccessors:
   Enabled: true
   ExactNameMatch: true
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/CaseEquality:
+  Enabled: false
