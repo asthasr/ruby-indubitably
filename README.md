@@ -1,4 +1,4 @@
-# Possibly - Maybe monad for Ruby
+# Indubitably - Maybe monad for Ruby
 
 [![Travis CI](https://travis-ci.org/asthasr/ruby-indubitably.svg?branch=master)](https://travis-ci.org/asthasr/ruby-indubitably)
 
