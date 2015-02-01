@@ -90,7 +90,7 @@ Some([2, 3, 4])._map { |n| n * n }          => Some([4, 9, 16])
 This also has the side-effect of making it easier to call methods on nested structures without flattening them completely:
 
 ```ruby
-Some(Some([2, 3, 4]).__map { |n| n * n }    => Some(Some([4, 9, 16]))
+Some(Some([2, 3, 4])).__map { |n| n * n }    => Some(Some([4, 9, 16]))
 ```
 
 ### Case expression
