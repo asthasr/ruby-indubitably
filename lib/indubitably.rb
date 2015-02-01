@@ -1,4 +1,5 @@
 # encoding: utf-8
+# base class for Some and None
 class Maybe
   ([:each] + Enumerable.instance_methods).each do |enumerable_method|
     define_method(enumerable_method) do |*args, &block|
@@ -74,19 +75,17 @@ class Some < Maybe
   end
 
   def method_missing(method_sym, *args, &block)
-    map { |value| value.send(__strip_leading_underscore(method_sym), *args, &block) }
+    map { |value| value.send(__strip_leading_(method_sym), *args, &block) }
   end
 
   private
 
   def respond_to_missing?(method_sym, include_private = false)
-    @value.respond_to?(__strip_leading_underscore(method_sym), include_private) || super
+    @value.respond_to?(__strip_leading_(method_sym), include_private) || super
   end
 
-  def __strip_leading_underscore(method_sym)
-    if method_sym[0] == "_"
-      method_sym = method_sym.slice(1, method_sym.length)
-    end
+  def __strip_leading_(method_sym)
+    method_sym = method_sym.slice(1, method_sym.length) if method_sym[0] == "_"
     method_sym
   end
 
@@ -119,7 +118,7 @@ class None < Maybe
     self
   end
 
-  def respond_to_missing?(method_name, include_private = false)
+  def respond_to_missing?(*)
     true
   end
 
