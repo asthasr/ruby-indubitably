@@ -207,6 +207,42 @@ describe "indubitably" do
         expect(None()._something.is_none?).to be_truthy
       end
     end
+
+    describe "#respond_to?" do
+      it "returns true if forwarded method exists" do
+        expect(Some("maybe").respond_to?(:upcase)).to be_truthy
+      end
+
+      it "returns true if forwarded underscore method exists" do
+        expect(Some([1, 2, 3]).respond_to?(:_map)).to be_truthy
+      end
+
+      it "returns true if chained forwarded underscore method exists" do
+        expect(Some(Some([1, 2, 3])).respond_to?(:__map)).to be_truthy
+      end
+
+      it "returns false if method does not exist" do
+        expect(Some("maybe").respond_to?(:crazy_pants)).to be_falsy
+      end
+
+      it "returns false if passed underscore method it can't forward" do
+        expect(Some("maybe").respond_to?(:_crazy_pants)).to be_falsy
+      end
+
+      it "returns false if chained forwarded underscore method exists" do
+        expect(Some(Some([1, 2, 3])).respond_to?(:__map)).to be_truthy
+      end
+    end
+
+    describe "#method" do
+      it "returns a method if forwarded method exists" do
+        expect{ Some("maybe").method(:upcase)}.to_not raise_error
+      end
+
+      it "raises an error if forwarded method does not exist" do
+        expect{ Some("maybe").method(:crazy_pants)}.to raise_error(NameError)
+      end
+    end
   end
 
 
