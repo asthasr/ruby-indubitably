@@ -59,11 +59,11 @@ describe "indubitably" do
 
     describe "#join!" do
       it "joins all Some instances recursively" do
-        expect(nested_some.join!.get).to eql(10)
+        expect(deep_some.join!.get).to eql(10)
       end
 
       it "joins all None instances recursively" do
-        expect(nested_none.join!.is_none?).to be_truthy
+        expect(deep_none.join!.is_none?).to be_truthy
       end
     end
   end
@@ -184,28 +184,31 @@ describe "indubitably" do
     end
   end
 
-  it "forwards methods" do
-    expect(Some("maybe").upcase.get).to eql("MAYBE")
+  describe "method forwarding" do
+    it "forwards methods" do
+      expect(Some("maybe").upcase.get).to eql("MAYBE")
 
-    mapped = Some([1, 2, 3]).map { |arr| arr.map { |v| v * v } }
-    expect(mapped.get).to eql([1, 4, 9])
+      mapped = Some([1, 2, 3]).map { |arr| arr.map { |v| v * v } }
+      expect(mapped.get).to eql([1, 4, 9])
+    end
+
+    describe "underscore methods" do
+      let(:some_array) { Some([1, 2, 3, 4]) }
+
+      it "applies methods that have equivalents in Maybe to the wrapped value" do
+        expect(some_array._map { |n| n**2 }).to eq(Some([1, 4, 9, 16]))
+      end
+
+      it "applies methods without equivalents in Maybe to the wrapped value" do
+        expect(Some("abc")._upcase).to eq(Some("ABC"))
+      end
+
+      it "works with Nones" do
+        expect(None()._something.is_none?).to be_truthy
+      end
+    end
   end
 
-  describe "underscore methods" do
-    let(:some_array) { Some([1, 2, 3, 4]) }
-
-    it "applies methods that have equivalents in Maybe to the wrapped value" do
-      expect(some_array._map { |n| n**2 }).to eq(Some([1, 4, 9, 16]))
-    end
-
-    it "applies methods without equivalents in Maybe to the wrapped value" do
-      expect(Some("abc")._upcase).to eq(Some("ABC"))
-    end
-
-    it "works with Nones" do
-      expect(None()._something.is_none?).to be_truthy
-    end
-  end
 
   describe "if" do
     it "returns none if the condition is not met" do
