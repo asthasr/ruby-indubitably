@@ -1,6 +1,8 @@
 # encoding: utf-8
 # base class for Some and None
 class Maybe
+  @@none = nil
+
   ([:each] + Enumerable.instance_methods).each do |enumerable_method|
     define_method(enumerable_method) do |*args, &block|
       res = __enumerable_value.send(enumerable_method, *args, &block)
@@ -18,8 +20,29 @@ class Maybe
   end
   alias_method :eql?, :==
 
+  def self.concat(list, default = none)
+    if default == none
+      list.select(&:is_some?).map(&:get)
+    else
+      list.map { |x| x.or_else(default) }
+    end
+  end
+
   def self.empty_value?(value)
     value.nil? || (value.respond_to?(:length) && value.length == 0)
+  end
+
+  def self.join?(value)
+    return value if value.is_a?(Maybe)
+    Maybe(value)
+  end
+
+  def self.none
+    @@none ||= None.new
+  end
+
+  def self.seq(list, default = none)
+    Maybe(concat(list, default))
   end
 end
 
@@ -34,7 +57,7 @@ class Some < Maybe
   end
 
   def if(&blk)
-    blk.call(@value) ? self : None()
+    blk.call(@value) ? self : Maybe.none
   end
 
   def or_else(*)
@@ -74,19 +97,19 @@ class Some < Maybe
     other && other.class == self.class && @value === other.get
   end
 
+  # This strips the leading underscore if the method is sent with that prefix;
+  # this allows us to force dispatch to the contained object. It is inline in
+  # two places because this avoids a function call performance hit.
   def method_missing(method_sym, *args, &block)
-    map { |value| value.send(__strip_leading_(method_sym), *args, &block) }
+    method_sym = method_sym.slice(1, method_sym.length) if method_sym[0] == "_"
+    map { |value| value.send(method_sym, *args, &block) }
   end
 
   private
 
   def respond_to_missing?(method_sym, include_private = false)
-    @value.respond_to?(__strip_leading_(method_sym), include_private) || super
-  end
-
-  def __strip_leading_(method_sym)
     method_sym = method_sym.slice(1, method_sym.length) if method_sym[0] == "_"
-    method_sym
+    @value.respond_to?(method_sym, include_private) || super
   end
 
   def __enumerable_value
@@ -131,7 +154,7 @@ end
 
 # rubocop:disable MethodName
 def Maybe(value)
-  Maybe.empty_value?(value) ? None() : Some.new(value)
+  Maybe.empty_value?(value) ? Maybe.none : Some.new(value)
 end
 
 def Some(value)
@@ -139,6 +162,6 @@ def Some(value)
 end
 
 def None
-  None.new
+  Maybe.none
 end
 # rubocop:enable MethodName
