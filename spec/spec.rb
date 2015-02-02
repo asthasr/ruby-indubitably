@@ -245,7 +245,6 @@ describe "indubitably" do
     end
   end
 
-
   describe "if" do
     it "returns none if the condition is not met" do
       expect(Maybe(7).if { |x| x.even? }).to eq(None())
@@ -257,6 +256,47 @@ describe "indubitably" do
 
     it "works with None" do
       expect(Maybe(nil).if { |x| x.even? }).to eq(None())
+    end
+  end
+
+  describe ".join?" do
+    let(:already_wrapped) { Maybe(5) }
+    let(:already_none) { None() }
+
+    it "returns the same object if it's already wrapped" do
+      expect(Maybe.join?(already_wrapped)).to be(already_wrapped)
+    end
+
+    it "returns the same object if it's None" do
+      expect(Maybe.join?(already_none)).to be(already_none)
+    end
+
+    it "returns a wrapped value if it's unwrapped" do
+      expect(Maybe.join?(5)).to eq(already_wrapped)
+    end
+
+    it "returns a none if a blank value is passed" do
+      expect(Maybe.join?(nil)).to eq(already_none)
+    end
+  end
+
+  describe ".concat" do
+    let(:list) { [Some(1), None(), Some(2), Some(3), None()] }
+
+    it "returns the values of the somes" do
+      expect(Maybe.concat(list)).to eq([1, 2, 3])
+    end
+
+    it "returns the values of the somes, and defaults for the nones" do
+      expect(Maybe.concat(list, :a)).to eq([1, :a, 2, 3, :a])
+    end
+  end
+
+  describe ".seq" do
+    let(:list) { [Some(1), None(), Some(2), Some(3), None()] }
+
+    it "returns a wrapped list of the somes" do
+      expect(Maybe.seq(list)).to eq(Some([1, 2, 3]))
     end
   end
 end
