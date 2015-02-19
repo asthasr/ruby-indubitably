@@ -107,11 +107,6 @@ class Some < Maybe
 
   private
 
-  def respond_to_missing?(method_sym, include_private = false)
-    method_sym = method_sym.slice(1, method_sym.length) if method_sym[0] == "_"
-    @value.respond_to?(method_sym, include_private) || super
-  end
-
   def __enumerable_value
     [@value]
   end
@@ -139,10 +134,6 @@ class None < Maybe
 
   def method_missing(*)
     self
-  end
-
-  def respond_to_missing?(*)
-    true
   end
 
   private
