@@ -48,16 +48,14 @@ end
 
 # Represents a non-empty value
 class Some < Maybe
+  alias_method :if, :select
+
   def initialize(value)
     @value = value
   end
 
   def get
     @value
-  end
-
-  def if(&blk)
-    blk.call(@value) ? self : Maybe.none
   end
 
   def or_else(*)

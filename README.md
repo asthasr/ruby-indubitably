@@ -77,7 +77,13 @@ Maybe(None()).join                          => None()
 Maybe(Maybe(None())).join!                  => None()
 ```
 
-This is equivalent to `join` from the `Control.Monad` package in Haskell, or `x >>= id`.
+This is equivalent to `join` from the `Control.Monad` package in Haskell, or `x >>= id`. There is also an option to join statically, so that you can wrap values that may already be `Maybe`:
+
+```ruby
+Maybe.join?(7)                              => Some(7)
+Maybe.join?(Some(3))                        => Some(3)
+Maybe.join?(None())                         => None()
+```
 
 ### Forcing Value Dispatch
 
@@ -145,7 +151,7 @@ end
 
 ## Examples
 
-Instead of using if-clauses to define whether a value is a `nil`, you can wrap the value with `Maybe()` and threat it the same way whether or not it is a `nil`
+Instead of using if-clauses to define whether a value is a `nil`, you can wrap the value with `Maybe()` and threat it the same way whether or not it is a `nil`.
 
 Without Maybe():
 
