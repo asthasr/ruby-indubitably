@@ -192,18 +192,18 @@ describe "indubitably" do
       expect(mapped.get).to eql([1, 4, 9])
     end
 
-    describe "underscore methods" do
+    describe "underscore method dispatch" do
       let(:some_array) { Some([1, 2, 3, 4]) }
 
-      it "applies methods that have equivalents in Maybe to the wrapped value" do
+      it "sends methods that have equivalents in Maybe to the wrapped value" do
         expect(some_array._map { |n| n**2 }).to eq(Some([1, 4, 9, 16]))
       end
 
-      it "applies methods without equivalents in Maybe to the wrapped value" do
+      it "sends methods without equivalents in Maybe to the wrapped value" do
         expect(Some("abc")._upcase).to eq(Some("ABC"))
       end
 
-      it "works with Nones" do
+      it "works with None" do
         expect(None()._something.is_none?).to be_truthy
       end
     end
@@ -266,27 +266,27 @@ describe "indubitably" do
 
   describe "marshaling" do
     it "works for numbers" do
-      expect { Marshal::dump Some(7) }.to_not raise_error
+      expect { Marshal.dump Some(7) }.to_not raise_error
     end
 
     it "works for strings" do
-      expect { Marshal::dump Some("argyle") }.to_not raise_error
+      expect { Marshal.dump Some("argyle") }.to_not raise_error
     end
 
     it "works for None" do
-      expect { Marshal::dump Maybe(nil) }.to_not raise_error
+      expect { Marshal.dump Maybe(nil) }.to_not raise_error
     end
 
     it "loads the original result" do
       original = Some("argyle")
-      serialized = Marshal::dump original
-      expect(Marshal::load serialized).to eq(original)
+      serialized = Marshal.dump original
+      expect(Marshal.load serialized).to eq(original)
     end
 
     it "loads a None when appropriate" do
       original = Maybe(nil)
-      serialized = Marshal::dump original
-      expect(Marshal::load serialized).to eql(original)
+      serialized = Marshal.dump original
+      expect(Marshal.load serialized).to eql(original)
     end
   end
 end
