@@ -233,6 +233,24 @@ describe "indubitably" do
     end
   end
 
+  describe "#if_some" do
+    it "returns the provided value if the value is Some" do
+      expect(Maybe(7).if_some(:foo)).to eq(Some(:foo))
+    end
+
+    it "returns None() if the value is None" do
+      expect(Maybe(nil).if_some(:foo)).to eq(None())
+    end
+
+    it "evaluates a block if provided" do
+      expect(Maybe(7).if_some { 37 }).to eq(Some(37))
+    end
+
+    it "does not evaluate a block if None" do
+      expect { Maybe(nil).if_some { raise 'oops' } }.to_not raise_error
+    end
+  end
+
   describe ".join?" do
     let(:already_wrapped) { Maybe(5) }
     let(:already_none) { None() }
