@@ -62,6 +62,10 @@ class Some < Maybe
     @value
   end
 
+  def if_some(val = nil, &blk)
+    Maybe(val.nil? ? blk.call : val)
+  end
+
   # rubocop:disable PredicateName
   def is_some?
     true
