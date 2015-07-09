@@ -44,8 +44,10 @@ Maybe(nil).is_some?                         => false
 Maybe(nil).is_none?                         => true
 Maybe("I'm a value").get                    => "I'm a value"
 Maybe("I'm a value").or_else { "No value" } => "I'm a value"
+Maybe("I'm a value").or_nil                 => "I'm a value"
 Maybe(nil).get                              => RuntimeError: No such element
 Maybe(nil).or_else { "No value" }           => "No value"
+Maybe(nil).or_nil                           => nil
 ```
 
 In addition, `Some` and `None` implement `Enumerable`, so all methods available for `Enumerable` are available for `Some` and `None`:
@@ -65,6 +67,18 @@ All the other methods you call on `Some` are forwarded to the `value`.
 Maybe("I'm a value").upcase                 => #<Some:0x007ffe198e6128 @value="I'M A VALUE">
 Maybe(nil).upcase                           => None
 ```
+
+### Value Injection **(New)**
+
+You can use the `#if_some` method to inject a value into a `Some`:
+
+```ruby
+Some(7).if_some(:foo)                       => Some(:foo)
+Some(7).if_some { 'argyle socks' }          => Some('argyle socks')
+None().if_some(:foo)                        => None
+```
+
+This is primarily useful when you are making a decision for an unrelated value, with `value.if_some(:foo).or_else(:bar)` replacing `value.is_some? ? :foo : :bar`.
 
 ### Joining
 
