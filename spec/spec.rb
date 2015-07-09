@@ -223,6 +223,16 @@ describe "indubitably" do
     end
   end
 
+  describe "#or_nil" do
+    it "returns nil when called on None" do
+      expect(None().or_nil).to eq(nil)
+    end
+
+    it "returns the value when called on Some" do
+      expect(Some(7).or_nil).to eq(7)
+    end
+  end
+
   describe ".join?" do
     let(:already_wrapped) { Maybe(5) }
     let(:already_none) { None() }

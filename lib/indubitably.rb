@@ -20,6 +20,10 @@ class Maybe
   end
   alias_method :eql?, :==
 
+  def or_nil
+    or_else(nil)
+  end
+
   def self.concat(list, default = none)
     if default == none
       list.select(&:is_some?).map(&:get)
