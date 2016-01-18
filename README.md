@@ -1,8 +1,8 @@
 # Indubitably - Maybe monad for Ruby.
 
-[![Travis CI](https://travis-ci.org/asthasr/ruby-indubitably.svg?branch=master)](https://travis-ci.org/asthasr/ruby-indubitably)
+This is a `Maybe` implementation for Ruby. It is production-ready and battle-tested!
 
-This is a `Maybe` implementation for Ruby. It is production-ready (and battle-tested!).
+[![Travis CI](https://travis-ci.org/asthasr/ruby-indubitably.svg?branch=master)](https://travis-ci.org/asthasr/ruby-indubitably)
 
 ```ruby
 puts Maybe(User.find_by_id("123")).username.downcase.or_else { "N/A" }
