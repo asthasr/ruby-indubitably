@@ -1,8 +1,8 @@
 # encoding: utf-8
 Gem::Specification.new do |s|
   s.name        = "indubitably"
-  s.version     = "0.4.1"
-  s.date        = "2015-02-13"
+  s.version     = "0.4.2"
+  s.date        = "2017-01-11"
   s.summary     = "Maybe monad"
   s.description = "An implementation of Maybe/Option for Ruby."
   s.authors     = ["Blake Hyde", "Mikko Koski"]
