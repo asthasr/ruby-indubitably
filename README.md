@@ -1,3 +1,5 @@
+> :warning: **This library is no longer maintained, and I do not recommend using it or any similar library in Ruby.**
+
 # Indubitably - Maybe monad for Ruby.
 
 This is a `Maybe` implementation for Ruby. It is production-ready and battle-tested!
